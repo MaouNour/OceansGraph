@@ -1,14 +1,18 @@
 package Graph;
 
 import java.util.Scanner;
+import javax.swing.SwingUtilities;
+import Gui.OceanGrid;
 
 public class App {
     static int n;
     static int m;
     static int[][] arr;
+    static Graph g;
 
     public static void main(String[] args) {
         dataEntry();
+        SwingUtilities.invokeLater(() -> new OceanGrid(arr, g.booleanValues, g.desert, g.rivers, n, m));
     }
 
     public static void dataEntry() {
@@ -27,7 +31,7 @@ public class App {
             System.out.println();
         }
 
-        Graph g = new Graph(n, m);
+        g = new Graph(n, m);
         System.out.println("Enter y if you want to enter desert: (anything else for no deserts)");
         String desertAccept = scan.next();
         if (desertAccept.equals("y")) {
@@ -42,9 +46,12 @@ public class App {
         }
         while (true) {
             System.out.println(
-                    "want to add River? (write x to quit or \"all\" to make all adjanstant cells have rivers)");
+                    "want to add River? (x to not , q to quit or \"all\" to make all adjanstant cells have rivers)");
             String c = scan.next();
-            if (c.equals("x"))
+            if (c.equals("x")) {
+                g.useRivers = false;
+            }
+            if (c.equals("q") || c.equals("x"))
                 break;
             if (c.equals("all")) {
                 g.rivers = null;

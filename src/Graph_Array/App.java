@@ -9,6 +9,7 @@ public class App {
 
     public static void main(String[] args) {
         dataEntry();
+
     }
 
     public static void dataEntry() {

@@ -10,6 +10,7 @@ public class Graph {
     int[] booleanValues;
     boolean[][] desert;
     boolean[][] rivers;
+    public boolean useRivers = false;
 
     Graph(int n, int m) {
         this.m = m;
@@ -32,6 +33,7 @@ public class Graph {
     Graph(int n, int m, int[][] dataArray, boolean rivers[][]) {
         this(n, m);
         this.rivers = rivers;
+        useRivers = true;
         arrayEntry(dataArray);
     }
 
@@ -78,7 +80,7 @@ public class Graph {
         Arrays.fill(booleanValues, 0);
         // int temp =0;
         for (int i = 0; i < numberOfNodes; i++) {
-            calculateBooleanValue(i);
+            calculateBooleanValue(i, -1);
             // booleanValues[i]=temp;
         }
         for (int i = 0; i < numberOfNodes; i++) {
@@ -87,10 +89,10 @@ public class Graph {
         }
     }
 
-    public int calculateBooleanValue(int i) {
+    public int calculateBooleanValue(int i, int from) {
         if (desert[App.getRow(i)][App.getColumn(i)])
             return 0;
-        if (booleanValues[i] != 0)
+        if (booleanValues[i] != 0 && useRivers)
             return booleanValues[i];
         int temp = 0;
         if (App.isOnAtlanticOcean(i) && App.isOnPacificOcean(i)) {
@@ -101,7 +103,8 @@ public class Graph {
         else if (App.isOnPacificOcean(i))
             temp = 2;
         for (Integer j : arrRows.get(i)) {
-            temp = addBooleanValues(calculateBooleanValue(j), temp);
+            if (j != from)
+                temp = addBooleanValues(calculateBooleanValue(j, i), temp);
         }
         booleanValues[i] = temp;
         return temp;
@@ -115,4 +118,5 @@ public class Graph {
             return 3;
         return a + b;
     }
+
 }
